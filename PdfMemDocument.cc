@@ -1,4 +1,5 @@
 #include <node.h>
+#include "PdfError.h"
 #include "PdfInfo.h"
 #include "PdfPage.h"
 #include "PdfVecObjects.h"
@@ -67,8 +68,16 @@ NAN_METHOD(PdfMemDocument::Load) {
   PdfMemDocument* obj = ObjectWrap::Unwrap<PdfMemDocument>(args.This());
   Local<String> filename = args[0]->ToString();
 
-  NanUtf8String* charFilename = new NanUtf8String(filename);
-  obj->_obj->Load(charFilename->operator*());
+  try {
+    NanUtf8String* charFilename = new NanUtf8String(filename);
+    obj->_obj->Load(charFilename->operator*());
+  } catch (PoDoFo::PdfError& e) {
+    Local<FunctionTemplate> errTpl = NanNew(PdfError::constructor_template);
+    Local<Function> errFunc = errTpl->GetFunction();
+    Handle<Value> errFuncArgs[] = { NanNew<External>(&e) };
+    Local<Object> errObj = errFunc->NewInstance(1, errFuncArgs);
+    return NanThrowError(errObj);
+  }
 
   NanReturnUndefined();
 }

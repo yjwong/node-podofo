@@ -4,6 +4,7 @@
       "target_name": "podofo",
       "sources": [
         "PdfContentsTokenizer.cc",
+        "PdfError.cc",
         "PdfInfo.cc",
         "PdfMemDocument.cc",
         "PdfObject.cc",
