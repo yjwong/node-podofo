@@ -22,10 +22,15 @@
     "nan": "^1.8.4",
     "node-pre-gyp": "^0.6.7"
   },
-  "bundledDependencies": ["node-pre-gyp"],
+  "bundledDependencies": [
+    "node-pre-gyp"
+  ],
   "binary": {
     "module_name": "podofo",
     "module_path": "./lib/binding/",
     "host": "https://node-podofo.s3-ap-southeast-1.amazonaws.com"
+  },
+  "devDependencies": {
+    "aws-sdk": "^2.1.36"
   }
 }
