@@ -1,7 +1,7 @@
-var podofo = require('./index');
+var podofo = require('../index');
 
 var pdf = new podofo.PdfMemDocument();
-pdf.Load('/tmp/Resume.pdf');
+pdf.Load('/tmp/yanrong.pdf');
 var tokenizer = new podofo.PdfContentsTokenizer(pdf.GetPage(0));
 
 var texts = [];
