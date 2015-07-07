@@ -1,0 +1,31 @@
+{
+  "name": "podofo",
+  "version": "0.0.1",
+  "description": "Node.js bindings for the PoDoFo PDF library.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "install": "node-pre-gyp install --fallback-to-build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yjwong/node-podofo.git"
+  },
+  "author": "Wong Yong Jie <yjwong92@gmail.com>",
+  "license": "MIT",
+  "gypfile": true,
+  "bugs": {
+    "url": "https://github.com/yjwong/node-podofo/issues"
+  },
+  "homepage": "https://github.com/yjwong/node-podofo#readme",
+  "dependencies": {
+    "nan": "^1.8.4",
+    "node-pre-gyp": "^0.6.7"
+  },
+  "bundledDependencies": ["node-pre-gyp"],
+  "binary": {
+    "module_name": "podofo",
+    "module_path": "./lib/binding/",
+    "host": "https://node-podofo.s3-ap-southeast-1.amazonaws.com"
+  }
+}

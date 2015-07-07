@@ -1,0 +1,42 @@
+# Compiled Object files
+*.slo
+*.lo
+*.o
+*.obj
+
+# Precompiled Headers
+*.gch
+*.pch
+
+# Compiled Dynamic libraries
+*.so
+*.dylib
+*.dll
+
+# Fortran module files
+*.mod
+
+# Compiled Static libraries
+*.lai
+*.la
+*.a
+*.lib
+
+# Executables
+*.exe
+*.out
+*.app
+
+# IntelliJ IDEA
+.idea/
+
+# Vim
+*.sw*
+.ycm_extra_conf.*
+
+# node-gyp build directory
+build/
+lib/binding/
+
+# NPM
+node_modules/
