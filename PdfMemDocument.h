@@ -11,7 +11,7 @@ public:
   static void Init(v8::Handle<v8::Object> exports);
 
 private:
-  static v8::Persistent<v8::FunctionTemplate> constructor_template;
+  static Nan::Persistent<v8::FunctionTemplate> constructor_template;
 
   static NAN_METHOD(New);
   static NAN_METHOD(Load);

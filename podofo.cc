@@ -13,7 +13,7 @@ using namespace v8;
 
 void DefineConstant(Handle<Object> exports, const char* name, int value) {
   PropertyAttribute attributes = static_cast<PropertyAttribute>(ReadOnly | DontDelete);
-  exports->ForceSet(NanNew<String>(name), NanNew<Number>(value), attributes);
+  exports->ForceSet(Nan::New<String>(name).ToLocalChecked(), Nan::New<Number>(value), attributes);
 }
 
 void InitAll(Handle<Object> exports) {

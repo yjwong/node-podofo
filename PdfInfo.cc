@@ -4,7 +4,6 @@
 using v8::Handle;
 using v8::Object;
 using v8::Local;
-using v8::Persistent;
 using v8::FunctionTemplate;
 using v8::Function;
 using v8::String;
@@ -12,96 +11,96 @@ using v8::Number;
 using v8::Boolean;
 using v8::External;
 
-Persistent<FunctionTemplate> PdfInfo::constructor_template;
+Nan::Persistent<FunctionTemplate> PdfInfo::constructor_template;
 
 PdfInfo::PdfInfo(PoDoFo::PdfInfo* obj) : _obj(obj) { }
 
 PdfInfo::~PdfInfo() { }
 
 void PdfInfo::Init(Handle<Object> exports) {
-  NanScope();
+  Nan::HandleScope scope;
 
   // Prepare constructor template
-  Local<FunctionTemplate> tpl = NanNew<FunctionTemplate>(New);
-  tpl->SetClassName(NanNew("PdfInfo"));
+  Local<FunctionTemplate> tpl = Nan::New<FunctionTemplate>(New);
+  tpl->SetClassName(Nan::New("PdfInfo").ToLocalChecked());
   tpl->InstanceTemplate()->SetInternalFieldCount(8);
 
   // Prototype
-  NODE_SET_PROTOTYPE_METHOD(tpl, "GetAuthor", GetAuthor);
-  NODE_SET_PROTOTYPE_METHOD(tpl, "GetCreator", GetCreator);
-  NODE_SET_PROTOTYPE_METHOD(tpl, "GetKeywords", GetKeywords);
-  NODE_SET_PROTOTYPE_METHOD(tpl, "GetSubject", GetSubject);
-  NODE_SET_PROTOTYPE_METHOD(tpl, "GetTitle", GetTitle);
-  NODE_SET_PROTOTYPE_METHOD(tpl, "GetProducer", GetProducer);
-  NODE_SET_PROTOTYPE_METHOD(tpl, "GetTrapped", GetTrapped);
- 
-  NanAssignPersistent(constructor_template, tpl);
-  exports->Set(NanNew("PdfInfo"), tpl->GetFunction());
+  Nan::SetPrototypeMethod(tpl, "GetAuthor", GetAuthor);
+  Nan::SetPrototypeMethod(tpl, "GetCreator", GetCreator);
+  Nan::SetPrototypeMethod(tpl, "GetKeywords", GetKeywords);
+  Nan::SetPrototypeMethod(tpl, "GetSubject", GetSubject);
+  Nan::SetPrototypeMethod(tpl, "GetTitle", GetTitle);
+  Nan::SetPrototypeMethod(tpl, "GetProducer", GetProducer);
+  Nan::SetPrototypeMethod(tpl, "GetTrapped", GetTrapped);
+
+  constructor_template.Reset(tpl); 
+  exports->Set(Nan::New("PdfInfo").ToLocalChecked(), tpl->GetFunction());
 }
 
 NAN_METHOD(PdfInfo::New) {
-  NanScope();
+  Nan::HandleScope scope;
 
-  if (!args.IsConstructCall()) {
-    return NanThrowTypeError("Use the new operator to create new PdfInfo objects");
+  if (!info.IsConstructCall()) {
+    return Nan::ThrowTypeError("Use the new operator to create new PdfInfo objects");
   }
 
-  if (args.Length() < 1 || !args[0]->IsExternal()) {
-    return NanThrowTypeError("PdfInfo object cannot be created directly");
+  if (info.Length() < 1 || !info[0]->IsExternal()) {
+    return Nan::ThrowTypeError("PdfInfo object cannot be created directly");
   }
 
-  PdfInfo* info = new PdfInfo(static_cast<PoDoFo::PdfInfo*>(
-      External::Cast(*args[0])->Value()));
-  info->Wrap(args.This());
-  NanReturnValue(args.This());
+  PdfInfo* pdfInfo = new PdfInfo(static_cast<PoDoFo::PdfInfo*>(
+      External::Cast(*info[0])->Value()));
+  pdfInfo->Wrap(info.This());
+  info.GetReturnValue().Set(info.This());
 }
 
 NAN_METHOD(PdfInfo::GetAuthor) {
-  NanScope();
-  PdfInfo* obj = ObjectWrap::Unwrap<PdfInfo>(args.This());
+  Nan::HandleScope scope;
+  PdfInfo* obj = ObjectWrap::Unwrap<PdfInfo>(info.This());
   PoDoFo::PdfString author = obj->_obj->GetAuthor();
-  NanReturnValue(NanNew<String>(author.GetStringUtf8()));
+  info.GetReturnValue().Set(Nan::New<String>(author.GetStringUtf8()).ToLocalChecked());
 }
 
 NAN_METHOD(PdfInfo::GetCreator) {
-  NanScope();
-  PdfInfo* obj = ObjectWrap::Unwrap<PdfInfo>(args.This());
+  Nan::HandleScope scope;
+  PdfInfo* obj = ObjectWrap::Unwrap<PdfInfo>(info.This());
   PoDoFo::PdfString creator = obj->_obj->GetCreator();
-  NanReturnValue(NanNew<String>(creator.GetStringUtf8()));
+  info.GetReturnValue().Set(Nan::New<String>(creator.GetStringUtf8()).ToLocalChecked());
 }
 
 NAN_METHOD(PdfInfo::GetKeywords) {
-  NanScope();
-  PdfInfo* obj = ObjectWrap::Unwrap<PdfInfo>(args.This());
+  Nan::HandleScope scope;
+  PdfInfo* obj = ObjectWrap::Unwrap<PdfInfo>(info.This());
   PoDoFo::PdfString keywords = obj->_obj->GetKeywords();
-  NanReturnValue(NanNew<String>(keywords.GetStringUtf8()));
+  info.GetReturnValue().Set(Nan::New<String>(keywords.GetStringUtf8()).ToLocalChecked());
 }
 
 NAN_METHOD(PdfInfo::GetSubject) {
-  NanScope();
-  PdfInfo* obj = ObjectWrap::Unwrap<PdfInfo>(args.This());
+  Nan::HandleScope scope;
+  PdfInfo* obj = ObjectWrap::Unwrap<PdfInfo>(info.This());
   PoDoFo::PdfString subject = obj->_obj->GetSubject();
-  NanReturnValue(NanNew<String>(subject.GetStringUtf8()));
+  info.GetReturnValue().Set(Nan::New<String>(subject.GetStringUtf8()).ToLocalChecked());
 }
 
 NAN_METHOD(PdfInfo::GetTitle) {
-  NanScope();
-  PdfInfo* obj = ObjectWrap::Unwrap<PdfInfo>(args.This());
+  Nan::HandleScope scope;
+  PdfInfo* obj = ObjectWrap::Unwrap<PdfInfo>(info.This());
   PoDoFo::PdfString title = obj->_obj->GetTitle();
-  NanReturnValue(NanNew<String>(title.GetStringUtf8()));
+  info.GetReturnValue().Set(Nan::New<String>(title.GetStringUtf8()).ToLocalChecked());
 }
 
 NAN_METHOD(PdfInfo::GetProducer) {
-  NanScope();
-  PdfInfo* obj = ObjectWrap::Unwrap<PdfInfo>(args.This());
+  Nan::HandleScope scope;
+  PdfInfo* obj = ObjectWrap::Unwrap<PdfInfo>(info.This());
   PoDoFo::PdfString producer = obj->_obj->GetProducer();
-  NanReturnValue(NanNew<String>(producer.GetStringUtf8()));
+  info.GetReturnValue().Set(Nan::New<String>(producer.GetStringUtf8()).ToLocalChecked());
 }
 
 NAN_METHOD(PdfInfo::GetTrapped) {
-  NanScope();
-  PdfInfo* obj = ObjectWrap::Unwrap<PdfInfo>(args.This());
+  Nan::HandleScope scope;
+  PdfInfo* obj = ObjectWrap::Unwrap<PdfInfo>(info.This());
   PoDoFo::PdfName trapped = obj->_obj->GetTrapped();
-  NanReturnValue(NanNew<String>(trapped.GetName()));
+  info.GetReturnValue().Set(Nan::New<String>(trapped.GetName()).ToLocalChecked());
 }
 

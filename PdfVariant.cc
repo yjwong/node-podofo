@@ -6,7 +6,6 @@ using v8::Handle;
 using v8::Value;
 using v8::Object;
 using v8::Local;
-using v8::Persistent;
 using v8::FunctionTemplate;
 using v8::Function;
 using v8::Number;
@@ -14,7 +13,7 @@ using v8::String;
 using v8::Array;
 using v8::External;
 
-Persistent<FunctionTemplate> PdfVariant::constructor_template;
+Nan::Persistent<FunctionTemplate> PdfVariant::constructor_template;
 
 PdfVariant::PdfVariant() :
   _obj(new PoDoFo::PdfVariant()),
@@ -29,331 +28,331 @@ PdfVariant::~PdfVariant() {
 }
 
 void PdfVariant::Init(Handle<Object> exports) {
-  NanScope();
+  Nan::HandleScope scope;
 
   // Prepare constructor template
-  Local<FunctionTemplate> tpl = NanNew<FunctionTemplate>(New);
-  tpl->SetClassName(NanNew("PdfVariant"));
+  Local<FunctionTemplate> tpl = Nan::New<FunctionTemplate>(New);
+  tpl->SetClassName(Nan::New("PdfVariant").ToLocalChecked());
   tpl->InstanceTemplate()->SetInternalFieldCount(30);
 
   // Prototype
-  NODE_SET_PROTOTYPE_METHOD(tpl, "IsEmpty", IsEmpty);
-  NODE_SET_PROTOTYPE_METHOD(tpl, "Clear", Clear);
-  NODE_SET_PROTOTYPE_METHOD(tpl, "GetDataType", GetDataType);
-  NODE_SET_PROTOTYPE_METHOD(tpl, "GetDataTypeString", GetDataTypeString);
-  NODE_SET_PROTOTYPE_METHOD(tpl, "IsBool", IsBool);
-  NODE_SET_PROTOTYPE_METHOD(tpl, "IsNumber", IsNumber);
-  NODE_SET_PROTOTYPE_METHOD(tpl, "IsReal", IsReal);
-  NODE_SET_PROTOTYPE_METHOD(tpl, "IsString", IsString);
-  NODE_SET_PROTOTYPE_METHOD(tpl, "IsHexString", IsHexString);
-  NODE_SET_PROTOTYPE_METHOD(tpl, "IsName", IsName);
-  NODE_SET_PROTOTYPE_METHOD(tpl, "IsArray", IsArray);
-  NODE_SET_PROTOTYPE_METHOD(tpl, "IsDictionary", IsDictionary);
-  NODE_SET_PROTOTYPE_METHOD(tpl, "IsRawData", IsRawData);
-  NODE_SET_PROTOTYPE_METHOD(tpl, "IsNull", IsNull);
-  NODE_SET_PROTOTYPE_METHOD(tpl, "IsReference", IsReference);
-  NODE_SET_PROTOTYPE_METHOD(tpl, "SetBool", SetBool);
-  NODE_SET_PROTOTYPE_METHOD(tpl, "GetBool", GetBool);
-  NODE_SET_PROTOTYPE_METHOD(tpl, "SetNumber", SetNumber);
-  NODE_SET_PROTOTYPE_METHOD(tpl, "GetNumber", GetNumber);
-  NODE_SET_PROTOTYPE_METHOD(tpl, "SetReal", SetReal);
-  NODE_SET_PROTOTYPE_METHOD(tpl, "GetReal", GetReal);
-  NODE_SET_PROTOTYPE_METHOD(tpl, "GetString", GetString);
-  NODE_SET_PROTOTYPE_METHOD(tpl, "GetName", GetName);
-  NODE_SET_PROTOTYPE_METHOD(tpl, "GetArray", GetArray);
-  NODE_SET_PROTOTYPE_METHOD(tpl, "GetDictionary", GetDictionary);
-  NODE_SET_PROTOTYPE_METHOD(tpl, "GetRawData", GetRawData);
-  NODE_SET_PROTOTYPE_METHOD(tpl, "IsDirty", IsDirty);
-  NODE_SET_PROTOTYPE_METHOD(tpl, "SetImmutable", SetImmutable);
-  NODE_SET_PROTOTYPE_METHOD(tpl, "GetImmutable", GetImmutable);
- 
-  NanAssignPersistent(constructor_template, tpl);
-  exports->Set(NanNew("PdfVariant"), tpl->GetFunction());
+  Nan::SetPrototypeMethod(tpl, "IsEmpty", IsEmpty);
+  Nan::SetPrototypeMethod(tpl, "Clear", Clear);
+  Nan::SetPrototypeMethod(tpl, "GetDataType", GetDataType);
+  Nan::SetPrototypeMethod(tpl, "GetDataTypeString", GetDataTypeString);
+  Nan::SetPrototypeMethod(tpl, "IsBool", IsBool);
+  Nan::SetPrototypeMethod(tpl, "IsNumber", IsNumber);
+  Nan::SetPrototypeMethod(tpl, "IsReal", IsReal);
+  Nan::SetPrototypeMethod(tpl, "IsString", IsString);
+  Nan::SetPrototypeMethod(tpl, "IsHexString", IsHexString);
+  Nan::SetPrototypeMethod(tpl, "IsName", IsName);
+  Nan::SetPrototypeMethod(tpl, "IsArray", IsArray);
+  Nan::SetPrototypeMethod(tpl, "IsDictionary", IsDictionary);
+  Nan::SetPrototypeMethod(tpl, "IsRawData", IsRawData);
+  Nan::SetPrototypeMethod(tpl, "IsNull", IsNull);
+  Nan::SetPrototypeMethod(tpl, "IsReference", IsReference);
+  Nan::SetPrototypeMethod(tpl, "SetBool", SetBool);
+  Nan::SetPrototypeMethod(tpl, "GetBool", GetBool);
+  Nan::SetPrototypeMethod(tpl, "SetNumber", SetNumber);
+  Nan::SetPrototypeMethod(tpl, "GetNumber", GetNumber);
+  Nan::SetPrototypeMethod(tpl, "SetReal", SetReal);
+  Nan::SetPrototypeMethod(tpl, "GetReal", GetReal);
+  Nan::SetPrototypeMethod(tpl, "GetString", GetString);
+  Nan::SetPrototypeMethod(tpl, "GetName", GetName);
+  Nan::SetPrototypeMethod(tpl, "GetArray", GetArray);
+  Nan::SetPrototypeMethod(tpl, "GetDictionary", GetDictionary);
+  Nan::SetPrototypeMethod(tpl, "GetRawData", GetRawData);
+  Nan::SetPrototypeMethod(tpl, "IsDirty", IsDirty);
+  Nan::SetPrototypeMethod(tpl, "SetImmutable", SetImmutable);
+  Nan::SetPrototypeMethod(tpl, "GetImmutable", GetImmutable);
+
+  constructor_template.Reset(tpl); 
+  exports->Set(Nan::New("PdfVariant").ToLocalChecked(), tpl->GetFunction());
 }
 
 NAN_METHOD(PdfVariant::New) {
-  NanScope();
+  Nan::HandleScope scope;
 
-  if (!args.IsConstructCall()) {
-    return NanThrowTypeError("Use the new operator to create new PdfVariant objects");
+  if (!info.IsConstructCall()) {
+    return Nan::ThrowTypeError("Use the new operator to create new PdfVariant objects");
   }
 
   PdfVariant* objects;
-  if (args.Length() == 1 && args[0]->IsExternal()) {
+  if (info.Length() == 1 && info[0]->IsExternal()) {
     objects = new PdfVariant(static_cast<PoDoFo::PdfVariant*>(
-          External::Cast(*args[0])->Value()));
+          External::Cast(*info[0])->Value()));
   } else {
     objects = new PdfVariant();
   }
 
-  objects->Wrap(args.This());
-  NanReturnValue(args.This());
+  objects->Wrap(info.This());
+  info.GetReturnValue().Set(info.This());
 }
 
 NAN_METHOD(PdfVariant::IsEmpty) {
-  NanScope();
-  PdfVariant* obj = ObjectWrap::Unwrap<PdfVariant>(args.This());
-  NanReturnValue(obj->_obj->IsEmpty() ? NanTrue() : NanFalse());
+  Nan::HandleScope scope;
+  PdfVariant* obj = ObjectWrap::Unwrap<PdfVariant>(info.This());
+  info.GetReturnValue().Set(obj->_obj->IsEmpty() ? Nan::True() : Nan::False());
 }
 
 NAN_METHOD(PdfVariant::Clear) {
-  NanScope();
-  PdfVariant* obj = ObjectWrap::Unwrap<PdfVariant>(args.This());
+  Nan::HandleScope scope;
+  PdfVariant* obj = ObjectWrap::Unwrap<PdfVariant>(info.This());
   obj->_obj->Clear();
-  NanReturnUndefined();
+  info.GetReturnValue().Set(Nan::Undefined());
 }
 
 NAN_METHOD(PdfVariant::GetDataType) {
-  NanScope();
-  PdfVariant* obj = ObjectWrap::Unwrap<PdfVariant>(args.This());
-  NanReturnValue(NanNew<Number>(obj->_obj->GetDataType()));
+  Nan::HandleScope scope;
+  PdfVariant* obj = ObjectWrap::Unwrap<PdfVariant>(info.This());
+  info.GetReturnValue().Set(Nan::New<Number>(obj->_obj->GetDataType()));
 }
 
 NAN_METHOD(PdfVariant::GetDataTypeString) {
-  NanScope();
-  PdfVariant* obj = ObjectWrap::Unwrap<PdfVariant>(args.This());
+  Nan::HandleScope scope;
+  PdfVariant* obj = ObjectWrap::Unwrap<PdfVariant>(info.This());
 
   // PoDoFo documentation says that the char* returned by GetDataTypeString
   // should not be free'd.
   std::string str = std::string(obj->_obj->GetDataTypeString());
-  NanReturnValue(NanNew<String>(str.c_str()));
+  info.GetReturnValue().Set(Nan::New<String>(str.c_str()).ToLocalChecked());
 }
 
 NAN_METHOD(PdfVariant::IsBool) {
-  NanScope();
-  PdfVariant* obj = ObjectWrap::Unwrap<PdfVariant>(args.This());
-  NanReturnValue(obj->_obj->IsBool() ? NanTrue() : NanFalse());
+  Nan::HandleScope scope;
+  PdfVariant* obj = ObjectWrap::Unwrap<PdfVariant>(info.This());
+  info.GetReturnValue().Set(obj->_obj->IsBool() ? Nan::True() : Nan::False());
 }
 
 NAN_METHOD(PdfVariant::IsNumber) {
-  NanScope();
-  PdfVariant* obj = ObjectWrap::Unwrap<PdfVariant>(args.This());
-  NanReturnValue(obj->_obj->IsNumber() ? NanTrue() : NanFalse());
+  Nan::HandleScope scope;
+  PdfVariant* obj = ObjectWrap::Unwrap<PdfVariant>(info.This());
+  info.GetReturnValue().Set(obj->_obj->IsNumber() ? Nan::True() : Nan::False());
 }
 
 NAN_METHOD(PdfVariant::IsReal) {
-  NanScope();
-  PdfVariant* obj = ObjectWrap::Unwrap<PdfVariant>(args.This());
-  NanReturnValue(obj->_obj->IsReal() ? NanTrue() : NanFalse());
+  Nan::HandleScope scope;
+  PdfVariant* obj = ObjectWrap::Unwrap<PdfVariant>(info.This());
+  info.GetReturnValue().Set(obj->_obj->IsReal() ? Nan::True() : Nan::False());
 }
 
 NAN_METHOD(PdfVariant::IsString) {
-  NanScope();
-  PdfVariant* obj = ObjectWrap::Unwrap<PdfVariant>(args.This());
-  NanReturnValue(obj->_obj->IsString() ? NanTrue() : NanFalse());
+  Nan::HandleScope scope;
+  PdfVariant* obj = ObjectWrap::Unwrap<PdfVariant>(info.This());
+  info.GetReturnValue().Set(obj->_obj->IsString() ? Nan::True() : Nan::False());
 }
 
 NAN_METHOD(PdfVariant::IsHexString) {
-  NanScope();
-  PdfVariant* obj = ObjectWrap::Unwrap<PdfVariant>(args.This());
-  NanReturnValue(obj->_obj->IsHexString() ? NanTrue() : NanFalse());
+  Nan::HandleScope scope;
+  PdfVariant* obj = ObjectWrap::Unwrap<PdfVariant>(info.This());
+  info.GetReturnValue().Set(obj->_obj->IsHexString() ? Nan::True() : Nan::False());
 }
 
 NAN_METHOD(PdfVariant::IsName) {
-  NanScope();
-  PdfVariant* obj = ObjectWrap::Unwrap<PdfVariant>(args.This());
-  NanReturnValue(obj->_obj->IsName() ? NanTrue() : NanFalse());
+  Nan::HandleScope scope;
+  PdfVariant* obj = ObjectWrap::Unwrap<PdfVariant>(info.This());
+  info.GetReturnValue().Set(obj->_obj->IsName() ? Nan::True() : Nan::False());
 }
 
 NAN_METHOD(PdfVariant::IsArray) {
-  NanScope();
-  PdfVariant* obj = ObjectWrap::Unwrap<PdfVariant>(args.This());
-  NanReturnValue(obj->_obj->IsArray() ? NanTrue() : NanFalse());
+  Nan::HandleScope scope;
+  PdfVariant* obj = ObjectWrap::Unwrap<PdfVariant>(info.This());
+  info.GetReturnValue().Set(obj->_obj->IsArray() ? Nan::True() : Nan::False());
 }
 
 NAN_METHOD(PdfVariant::IsDictionary) {
-  NanScope();
-  PdfVariant* obj = ObjectWrap::Unwrap<PdfVariant>(args.This());
-  NanReturnValue(obj->_obj->IsDictionary() ? NanTrue() : NanFalse());
+  Nan::HandleScope scope;
+  PdfVariant* obj = ObjectWrap::Unwrap<PdfVariant>(info.This());
+  info.GetReturnValue().Set(obj->_obj->IsDictionary() ? Nan::True() : Nan::False());
 }
 
 NAN_METHOD(PdfVariant::IsRawData) {
-  NanScope();
-  PdfVariant* obj = ObjectWrap::Unwrap<PdfVariant>(args.This());
-  NanReturnValue(obj->_obj->IsRawData() ? NanTrue() : NanFalse());
+  Nan::HandleScope scope;
+  PdfVariant* obj = ObjectWrap::Unwrap<PdfVariant>(info.This());
+  info.GetReturnValue().Set(obj->_obj->IsRawData() ? Nan::True() : Nan::False());
 }
 
 NAN_METHOD(PdfVariant::IsNull) {
-  NanScope();
-  PdfVariant* obj = ObjectWrap::Unwrap<PdfVariant>(args.This());
-  NanReturnValue(obj->_obj->IsNull() ? NanTrue() : NanFalse());
+  Nan::HandleScope scope;
+  PdfVariant* obj = ObjectWrap::Unwrap<PdfVariant>(info.This());
+  info.GetReturnValue().Set(obj->_obj->IsNull() ? Nan::True() : Nan::False());
 }
 
 NAN_METHOD(PdfVariant::IsReference) {
-  NanScope();
-  PdfVariant* obj = ObjectWrap::Unwrap<PdfVariant>(args.This());
-  NanReturnValue(obj->_obj->IsReference() ? NanTrue() : NanFalse());
+  Nan::HandleScope scope;
+  PdfVariant* obj = ObjectWrap::Unwrap<PdfVariant>(info.This());
+  info.GetReturnValue().Set(obj->_obj->IsReference() ? Nan::True() : Nan::False());
 }
 
 NAN_METHOD(PdfVariant::SetBool) {
-  NanScope();
+  Nan::HandleScope scope;
 
-  if (args.Length() != 1) {
-    return NanThrowTypeError("SetBool requires exactly 1 argument");
+  if (info.Length() != 1) {
+    return Nan::ThrowTypeError("SetBool requires exactly 1 argument");
   }
 
-  if (!args[0]->IsBoolean()) {
-    return NanThrowTypeError("SetBool requires a boolean argument");
+  if (!info[0]->IsBoolean()) {
+    return Nan::ThrowTypeError("SetBool requires a boolean argument");
   }
 
-  PdfVariant* obj = ObjectWrap::Unwrap<PdfVariant>(args.This());
-  obj->_obj->SetBool(args[0]->ToBoolean()->Value());
+  PdfVariant* obj = ObjectWrap::Unwrap<PdfVariant>(info.This());
+  obj->_obj->SetBool(info[0]->ToBoolean()->Value());
 
-  NanReturnUndefined();
+  info.GetReturnValue().Set(Nan::Undefined());
 }
 
 NAN_METHOD(PdfVariant::GetBool) {
-  NanScope();
-  PdfVariant* obj = ObjectWrap::Unwrap<PdfVariant>(args.This());
-  NanReturnValue(obj->_obj->GetBool() ? NanTrue() : NanFalse());
+  Nan::HandleScope scope;
+  PdfVariant* obj = ObjectWrap::Unwrap<PdfVariant>(info.This());
+  info.GetReturnValue().Set(obj->_obj->GetBool() ? Nan::True() : Nan::False());
 }
 
 NAN_METHOD(PdfVariant::SetNumber) {
-  NanScope();
+  Nan::HandleScope scope;
 
-  if (args.Length() != 1) {
-    return NanThrowTypeError("SetNumber requires exactly 1 argument");
+  if (info.Length() != 1) {
+    return Nan::ThrowTypeError("SetNumber requires exactly 1 argument");
   }
 
-  if (!args[0]->IsNumber()) {
-    return NanThrowTypeError("SetNumber requires a number argument");
+  if (!info[0]->IsNumber()) {
+    return Nan::ThrowTypeError("SetNumber requires a number argument");
   }
 
-  PdfVariant* obj = ObjectWrap::Unwrap<PdfVariant>(args.This());
-  obj->_obj->SetNumber(args[0]->NumberValue());
+  PdfVariant* obj = ObjectWrap::Unwrap<PdfVariant>(info.This());
+  obj->_obj->SetNumber(info[0]->NumberValue());
 
-  NanReturnUndefined();
+  info.GetReturnValue().Set(Nan::Undefined());
 }
 
 NAN_METHOD(PdfVariant::GetNumber) {
-  NanScope();
-  PdfVariant* obj = ObjectWrap::Unwrap<PdfVariant>(args.This());
-  NanReturnValue(NanNew<Number>(obj->_obj->GetNumber()));
+  Nan::HandleScope scope;
+  PdfVariant* obj = ObjectWrap::Unwrap<PdfVariant>(info.This());
+  info.GetReturnValue().Set(Nan::New<Number>(obj->_obj->GetNumber()));
 }
 
 NAN_METHOD(PdfVariant::SetReal) {
-  NanScope();
+  Nan::HandleScope scope;
 
-  if (args.Length() != 1) {
-    return NanThrowTypeError("SetReal requires exactly 1 argument");
+  if (info.Length() != 1) {
+    return Nan::ThrowTypeError("SetReal requires exactly 1 argument");
   }
 
-  if (!args[0]->IsNumber()) {
-    return NanThrowTypeError("SetReal requires a number argument");
+  if (!info[0]->IsNumber()) {
+    return Nan::ThrowTypeError("SetReal requires a number argument");
   }
 
-  PdfVariant* obj = ObjectWrap::Unwrap<PdfVariant>(args.This());
-  obj->_obj->SetReal(args[0]->NumberValue());
+  PdfVariant* obj = ObjectWrap::Unwrap<PdfVariant>(info.This());
+  obj->_obj->SetReal(info[0]->NumberValue());
 
-  NanReturnUndefined();
+  info.GetReturnValue().Set(Nan::Undefined());
 }
 
 NAN_METHOD(PdfVariant::GetReal) {
-  NanScope();
-  PdfVariant* obj = ObjectWrap::Unwrap<PdfVariant>(args.This());
-  NanReturnValue(NanNew<Number>(obj->_obj->GetReal()));
+  Nan::HandleScope scope;
+  PdfVariant* obj = ObjectWrap::Unwrap<PdfVariant>(info.This());
+  info.GetReturnValue().Set(Nan::New<Number>(obj->_obj->GetReal()));
 }
 
 NAN_METHOD(PdfVariant::GetString) {
-  NanScope();
-  PdfVariant* obj = ObjectWrap::Unwrap<PdfVariant>(args.This());
-  NanReturnValue(NanNew<String>(obj->_obj->GetString().GetStringUtf8()));
+  Nan::HandleScope scope;
+  PdfVariant* obj = ObjectWrap::Unwrap<PdfVariant>(info.This());
+  info.GetReturnValue().Set(Nan::New<String>(obj->_obj->GetString().GetStringUtf8()).ToLocalChecked());
 }
 
 NAN_METHOD(PdfVariant::GetName) {
-  NanScope();
-  PdfVariant* obj = ObjectWrap::Unwrap<PdfVariant>(args.This());
-  NanReturnValue(NanNew<String>(obj->_obj->GetName().GetName()));
+  Nan::HandleScope scope;
+  PdfVariant* obj = ObjectWrap::Unwrap<PdfVariant>(info.This());
+  info.GetReturnValue().Set(Nan::New<String>(obj->_obj->GetName().GetName()).ToLocalChecked());
 }
 
 NAN_METHOD(PdfVariant::GetArray) {
-  NanScope();
-  PdfVariant* obj = ObjectWrap::Unwrap<PdfVariant>(args.This());
+  Nan::HandleScope scope;
+  PdfVariant* obj = ObjectWrap::Unwrap<PdfVariant>(info.This());
   
   PoDoFo::PdfArray arr = obj->_obj->GetArray();
-  Local<Array> newArr = NanNew<Array>(arr.size());
+  Local<Array> newArr = Nan::New<Array>(arr.size());
 
   // Iterate through the native PdfArray, which is essentially a std::vector.
   // Each item is a native PdfObject which we must wrap.
-  Local<FunctionTemplate> tpl = NanNew(PdfObject::constructor_template);
+  Local<FunctionTemplate> tpl = Nan::New(PdfObject::constructor_template);
   for (PoDoFo::PdfArray::iterator it = arr.begin(); it != arr.end(); ++it) {
     PoDoFo::PdfObject* obj = new PoDoFo::PdfObject(*it);
 
     Local<Function> func = tpl->GetFunction();
-    Handle<Value> newFuncArgs[] = { NanNew<External>(obj) };
+    Handle<Value> newFuncArgs[] = { Nan::New<External>(obj) };
     Local<Object> newObj = func->NewInstance(1, newFuncArgs);
 
     newArr->Set(std::distance(arr.begin(), it), newObj);
   }
 
-  NanReturnValue(newArr);
+  info.GetReturnValue().Set(newArr);
 }
 
 NAN_METHOD(PdfVariant::GetDictionary) {
-  NanScope();
-  PdfVariant* obj = ObjectWrap::Unwrap<PdfVariant>(args.This());
+  Nan::HandleScope scope;
+  PdfVariant* obj = ObjectWrap::Unwrap<PdfVariant>(info.This());
 
   PoDoFo::PdfDictionary dict = obj->_obj->GetDictionary();
-  Local<Object> returnObj = NanNew<Object>();
+  Local<Object> returnObj = Nan::New<Object>();
 
   // Iterate through the native PdfDictionary, which is essentially an std::map
   // between a PdfName and PdfObject*.
-  Local<FunctionTemplate> tpl = NanNew(PdfObject::constructor_template);
+  Local<FunctionTemplate> tpl = Nan::New(PdfObject::constructor_template);
   PoDoFo::TKeyMap keys = dict.GetKeys();
   for (PoDoFo::TKeyMap::iterator it = keys.begin(); it != keys.end(); ++it) {
     PoDoFo::PdfName key = it->first;
     PoDoFo::PdfObject* val = new PoDoFo::PdfObject(*it->second);
 
     Local<Function> func = tpl->GetFunction();
-    Handle<Value> newFuncArgs[] = { NanNew<External>(val) };
+    Handle<Value> newFuncArgs[] = { Nan::New<External>(val) };
     Local<Object> newObj = func->NewInstance(1, newFuncArgs);
 
-    returnObj->Set(NanNew<String>(key.GetName()), newObj);
+    returnObj->Set(Nan::New<String>(key.GetName()).ToLocalChecked(), newObj);
   }
 
-  NanReturnValue(returnObj);
+  info.GetReturnValue().Set(returnObj);
 }
 
 // TODO: This is a stub implemenentation because it requires PdfReference to
 // be implemented first.
 NAN_METHOD(PdfVariant::GetReference) {
-  NanScope();
-  NanReturnUndefined();
+  Nan::HandleScope scope;
+  info.GetReturnValue().Set(Nan::Undefined());
 }
 
 // TODO: This is a stub implemenentation because it requires PdfData to be
 // implemented first.
 NAN_METHOD(PdfVariant::GetRawData) {
-  NanScope();
-  NanReturnUndefined();
+  Nan::HandleScope scope;
+  info.GetReturnValue().Set(Nan::Undefined());
 }
 
 NAN_METHOD(PdfVariant::IsDirty) {
-  NanScope();
-  PdfVariant* obj = ObjectWrap::Unwrap<PdfVariant>(args.This());
-  NanReturnValue(obj->_obj->IsDirty() ? NanTrue() : NanFalse());
+  Nan::HandleScope scope;
+  PdfVariant* obj = ObjectWrap::Unwrap<PdfVariant>(info.This());
+  info.GetReturnValue().Set(obj->_obj->IsDirty() ? Nan::True() : Nan::False());
 }
 
 NAN_METHOD(PdfVariant::SetImmutable) {
-  NanScope();
+  Nan::HandleScope scope;
 
-  if (args.Length() != 1) {
-    return NanThrowTypeError("SetImmutable requires exactly 1 argument");
+  if (info.Length() != 1) {
+    return Nan::ThrowTypeError("SetImmutable requires exactly 1 argument");
   }
 
-  if (!args[0]->IsBoolean()) {
-    return NanThrowTypeError("SetImmutable requires a number argument");
+  if (!info[0]->IsBoolean()) {
+    return Nan::ThrowTypeError("SetImmutable requires a number argument");
   }
 
-  PdfVariant* obj = ObjectWrap::Unwrap<PdfVariant>(args.This());
-  obj->_obj->SetImmutable(args[0]->ToBoolean()->Value());
+  PdfVariant* obj = ObjectWrap::Unwrap<PdfVariant>(info.This());
+  obj->_obj->SetImmutable(info[0]->ToBoolean()->Value());
 
-  NanReturnUndefined();
+  info.GetReturnValue().Set(Nan::Undefined());
 }
 
 NAN_METHOD(PdfVariant::GetImmutable) {
-  NanScope();
-  PdfVariant* obj = ObjectWrap::Unwrap<PdfVariant>(args.This());
-  NanReturnValue(obj->_obj->GetImmutable() ? NanTrue() : NanFalse());
+  Nan::HandleScope scope;
+  PdfVariant* obj = ObjectWrap::Unwrap<PdfVariant>(info.This());
+  info.GetReturnValue().Set(obj->_obj->GetImmutable() ? Nan::True() : Nan::False());
 }
 

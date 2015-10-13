@@ -7,7 +7,6 @@ using v8::Handle;
 using v8::Value;
 using v8::Object;
 using v8::Local;
-using v8::Persistent;
 using v8::FunctionTemplate;
 using v8::Function;
 using v8::String;
@@ -15,7 +14,7 @@ using v8::Number;
 using v8::Boolean;
 using v8::External;
 
-Persistent<FunctionTemplate> PdfContentsTokenizer::constructor_template;
+Nan::Persistent<FunctionTemplate> PdfContentsTokenizer::constructor_template;
 
 PdfContentsTokenizer::PdfContentsTokenizer(PoDoFo::PdfCanvas* pCanvas) :
   _obj(new PoDoFo::PdfContentsTokenizer(pCanvas)) { }
@@ -23,51 +22,51 @@ PdfContentsTokenizer::PdfContentsTokenizer(PoDoFo::PdfCanvas* pCanvas) :
 PdfContentsTokenizer::~PdfContentsTokenizer() { }
 
 void PdfContentsTokenizer::Init(Handle<Object> exports) {
-  NanScope();
+  Nan::HandleScope scope;
 
   // Prepare constructor template
-  Local<FunctionTemplate> tpl = NanNew<FunctionTemplate>(New);
-  tpl->SetClassName(NanNew("PdfContentsTokenizer"));
+  Local<FunctionTemplate> tpl = Nan::New<FunctionTemplate>(New);
+  tpl->SetClassName(Nan::New("PdfContentsTokenizer").ToLocalChecked());
   tpl->InstanceTemplate()->SetInternalFieldCount(1);
 
   // Prototype
-  NODE_SET_PROTOTYPE_METHOD(tpl, "ReadNext", ReadNext);
- 
-  NanAssignPersistent(constructor_template, tpl);
-  exports->Set(NanNew("PdfContentsTokenizer"), tpl->GetFunction());
+  Nan::SetPrototypeMethod(tpl, "ReadNext", ReadNext);
+
+  constructor_template.Reset(tpl);
+  exports->Set(Nan::New("PdfContentsTokenizer").ToLocalChecked(), tpl->GetFunction());
 }
 
 NAN_METHOD(PdfContentsTokenizer::New) {
-  NanScope();
+  Nan::HandleScope scope;
 
-  if (!args.IsConstructCall()) {
-    return NanThrowTypeError("Use the new operator to create new PdfContentsTokenizer objects");
+  if (!info.IsConstructCall()) {
+    return Nan::ThrowTypeError("Use the new operator to create new PdfContentsTokenizer objects");
   }
 
-  if (args.Length() < 1) {
-    return NanThrowTypeError("PdfContentsTokenizer object cannot be created directly");
+  if (info.Length() < 1) {
+    return Nan::ThrowTypeError("PdfContentsTokenizer object cannot be created directly");
   }
 
-  PdfContentsTokenizer* info;
-  if (args[0]->IsExternal()) {
-    info = new PdfContentsTokenizer(static_cast<PoDoFo::PdfCanvas*>(
-          External::Cast(*args[0])->Value()));
-  } else if (args[0]->IsObject()) {
-    Local<Object> canvasObj = args[0]->ToObject();
+  PdfContentsTokenizer* tokenizer;
+  if (info[0]->IsExternal()) {
+    tokenizer = new PdfContentsTokenizer(static_cast<PoDoFo::PdfCanvas*>(
+          External::Cast(*info[0])->Value()));
+  } else if (info[0]->IsObject()) {
+    Local<Object> canvasObj = info[0]->ToObject();
     PdfPage* canvas = ObjectWrap::Unwrap<PdfPage>(canvasObj);
-    info = new PdfContentsTokenizer(canvas->Unwrap());
+    tokenizer = new PdfContentsTokenizer(canvas->Unwrap());
   } else {
-    return NanThrowTypeError("First argument must be a PdfCanvas object");
+    return Nan::ThrowTypeError("First argument must be a PdfCanvas object");
   }
 
-  info->Wrap(args.This());
-  NanReturnValue(args.This());
+  tokenizer->Wrap(info.This());
+  info.GetReturnValue().Set(info.This());
 }
 
 NAN_METHOD(PdfContentsTokenizer::ReadNext) {
-  NanScope();
+  Nan::HandleScope scope;
 
-  PdfContentsTokenizer* obj = ObjectWrap::Unwrap<PdfContentsTokenizer>(args.This());
+  PdfContentsTokenizer* obj = ObjectWrap::Unwrap<PdfContentsTokenizer>(info.This());
 
   PoDoFo::EPdfContentsType type;
   const char* keyword;
@@ -75,27 +74,28 @@ NAN_METHOD(PdfContentsTokenizer::ReadNext) {
 
   bool retval = obj->_obj->ReadNext(type, keyword, *variant);
   if (!retval) {
-    NanReturnValue(NanFalse());
+    info.GetReturnValue().Set(Nan::False());
   } else {
-    Local<Object> retObj = NanNew<Object>();
-    retObj->Set(NanNew<String>("type"), NanNew<Number>(type));
+    Local<Object> retObj = Nan::New<Object>();
+    retObj->Set(Nan::New<String>("type").ToLocalChecked(), Nan::New<Number>(type));
 
     switch (type) {
     case PoDoFo::ePdfContentsType_Keyword:
-      retObj->Set(NanNew<String>("keyword"), NanNew<String>(keyword));
+      retObj->Set(Nan::New<String>("keyword").ToLocalChecked(),
+          Nan::New<String>(keyword).ToLocalChecked());
       break;
     case PoDoFo::ePdfContentsType_Variant:
     case PoDoFo::ePdfContentsType_ImageData:
       // Construct the PdfVariant object.
-      Local<FunctionTemplate> tpl = NanNew(PdfVariant::constructor_template);
+      Local<FunctionTemplate> tpl = Nan::New(PdfVariant::constructor_template);
       Local<Function> func = tpl->GetFunction();
-      Handle<Value> newFuncArgs[] = { NanNew<External>(variant) };
+      Handle<Value> newFuncArgs[] = { Nan::New<External>(variant) };
       Local<Object> newObj = func->NewInstance(1, newFuncArgs);
-      retObj->Set(NanNew<String>("variant"), newObj);
+      retObj->Set(Nan::New<String>("variant").ToLocalChecked(), newObj);
       break;
     }
     
-    NanReturnValue(retObj);
+    info.GetReturnValue().Set(retObj);
   }
 }
 

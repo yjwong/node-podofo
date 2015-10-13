@@ -8,7 +8,7 @@
 
 class PdfObject : public node::ObjectWrap {
 public:
-  static v8::Persistent<v8::FunctionTemplate> constructor_template;
+  static Nan::Persistent<v8::FunctionTemplate> constructor_template;
   static void Init(v8::Handle<v8::Object> exports);
 
 private:

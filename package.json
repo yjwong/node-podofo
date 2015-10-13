@@ -1,6 +1,6 @@
 {
   "name": "podofo",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Node.js bindings for the PoDoFo PDF library.",
   "main": "index.js",
   "scripts": {
@@ -19,7 +19,7 @@
   },
   "homepage": "https://github.com/yjwong/node-podofo#readme",
   "dependencies": {
-    "nan": "^1.8.4",
+    "nan": "^2.1.0",
     "node-pre-gyp": "^0.6.7"
   },
   "bundledDependencies": [

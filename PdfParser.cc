@@ -11,7 +11,7 @@ using v8::String;
 using v8::Boolean;
 using v8::Number;
 
-Persistent<FunctionTemplate> PdfParser::constructor_template;
+Nan::Persistent<FunctionTemplate> PdfParser::constructor_template;
 
 PdfParser::PdfParser(PdfVecObjects* pVecObjects) {
   _obj = new PoDoFo::PdfParser(pVecObjects->Unwrap());
@@ -24,90 +24,90 @@ PdfParser::~PdfParser() {
 }
 
 void PdfParser::Init(Handle<Object> exports) {
-  NanScope();
+  Nan::HandleScope scope;
 
   // Prepare constructor template
-  Local<FunctionTemplate> tpl = NanNew<FunctionTemplate>(New);
-  tpl->SetClassName(NanNew("PdfParser"));
+  Local<FunctionTemplate> tpl = Nan::New<FunctionTemplate>(New);
+  tpl->SetClassName(Nan::New("PdfParser").ToLocalChecked());
   tpl->InstanceTemplate()->SetInternalFieldCount(5);
 
   // Prototype
-  NODE_SET_PROTOTYPE_METHOD(tpl, "ParseFile", ParseFile);
-  NODE_SET_PROTOTYPE_METHOD(tpl, "QuickEncryptedCheck", QuickEncryptedCheck);
-  NODE_SET_PROTOTYPE_METHOD(tpl, "GetNumberOfIncrementalUpdates", GetNumberOfIncrementalUpdates);
-  NODE_SET_PROTOTYPE_METHOD(tpl, "GetPdfVersionString", GetPdfVersionString);
+  Nan::SetPrototypeMethod(tpl, "ParseFile", ParseFile);
+  Nan::SetPrototypeMethod(tpl, "QuickEncryptedCheck", QuickEncryptedCheck);
+  Nan::SetPrototypeMethod(tpl, "GetNumberOfIncrementalUpdates", GetNumberOfIncrementalUpdates);
+  Nan::SetPrototypeMethod(tpl, "GetPdfVersionString", GetPdfVersionString);
   
-  NanAssignPersistent(constructor_template, tpl);
-  exports->Set(NanNew("PdfParser"), tpl->GetFunction());
+  constructor_template.Reset(tpl);
+  exports->Set(Nan::New("PdfParser").ToLocalChecked(), tpl->GetFunction());
 }
 
 NAN_METHOD(PdfParser::New) {
-  NanScope();
+  Nan::HandleScope scope;
 
-  if (!args.IsConstructCall()) {
-    return NanThrowTypeError("Use the new operator to create new PdfParser objects");
+  if (!info.IsConstructCall()) {
+    return Nan::ThrowTypeError("Use the new operator to create new PdfParser objects");
   }
 
-  if (args.Length() < 1) {
-    return NanThrowTypeError("PdfParser requires at least 1 argument");
+  if (info.Length() < 1) {
+    return Nan::ThrowTypeError("PdfParser requires at least 1 argument");
   }
 
-  PdfVecObjects* pVecObjects = ObjectWrap::Unwrap<PdfVecObjects>(args[0]->ToObject());
+  PdfVecObjects* pVecObjects = ObjectWrap::Unwrap<PdfVecObjects>(info[0]->ToObject());
 
   PdfParser* parser = new PdfParser(pVecObjects);
-  parser->Wrap(args.This());
-  NanReturnValue(args.This());
+  parser->Wrap(info.This());
+  info.GetReturnValue().Set(info.This());
 }
 
 NAN_METHOD(PdfParser::ParseFile) {
-  NanScope();
+  Nan::HandleScope scope;
 
-  if (args.Length() < 1) {
-    return NanThrowTypeError("ParseFile requires at least 1 argument");
+  if (info.Length() < 1) {
+    return Nan::ThrowTypeError("ParseFile requires at least 1 argument");
   }
 
-  PdfParser* obj = ObjectWrap::Unwrap<PdfParser>(args.This());
-  Local<String> filename = args[0]->ToString();
-  Local<Boolean> loadOnDemand = args[1]->IsUndefined() ? NanTrue() : args[1]->ToBoolean();
+  PdfParser* obj = ObjectWrap::Unwrap<PdfParser>(info.This());
+  Local<String> filename = info[0]->ToString();
+  Local<Boolean> loadOnDemand = info[1]->IsUndefined() ? Nan::True() : info[1]->ToBoolean();
 
-  obj->_filename = new NanUtf8String(filename);
+  obj->_filename = new Nan::Utf8String(filename);
   obj->_obj->ParseFile(obj->_filename->operator*(), loadOnDemand->Value());
-  NanReturnUndefined();
+  info.GetReturnValue().Set(Nan::Undefined());
 }
 
 NAN_METHOD(PdfParser::QuickEncryptedCheck) {
-  NanScope();
+  Nan::HandleScope scope;
 
-  if (args.Length() < 1) {
-    return NanThrowTypeError("QuickEncryptedCheck requires at least 1 argument");
+  if (info.Length() < 1) {
+    return Nan::ThrowTypeError("QuickEncryptedCheck requires at least 1 argument");
   }
 
-  PdfParser* obj = ObjectWrap::Unwrap<PdfParser>(args.This());
-  Local<String> filename = args[0]->ToString();
+  PdfParser* obj = ObjectWrap::Unwrap<PdfParser>(info.This());
+  Local<String> filename = info[0]->ToString();
 
-  NanUtf8String* charFilename = new NanUtf8String(filename);
+  Nan::Utf8String* charFilename = new Nan::Utf8String(filename);
   bool encrypted = obj->_obj->QuickEncryptedCheck(charFilename->operator*());
 
-  NanReturnValue(encrypted ? NanTrue() : NanFalse());
+  info.GetReturnValue().Set(encrypted ? Nan::True() : Nan::False());
 }
 
 NAN_METHOD(PdfParser::GetNumberOfIncrementalUpdates) {
-  NanScope();
+  Nan::HandleScope scope;
 
-  PdfParser* obj = ObjectWrap::Unwrap<PdfParser>(args.This());
+  PdfParser* obj = ObjectWrap::Unwrap<PdfParser>(info.This());
   int updates = obj->_obj->GetNumberOfIncrementalUpdates();
 
-  NanReturnValue(NanNew<Number>(updates));
+  info.GetReturnValue().Set(Nan::New<Number>(updates));
 }
 
 NAN_METHOD(PdfParser::GetPdfVersionString) {
-  NanScope();
+  Nan::HandleScope scope;
 
-  PdfParser* obj = ObjectWrap::Unwrap<PdfParser>(args.This());
+  PdfParser* obj = ObjectWrap::Unwrap<PdfParser>(info.This());
   const char* charString = obj->_obj->GetPdfVersionString();
   Local<String> string = String::NewFromUtf8(Isolate::GetCurrent(), charString,
       String::kNormalString, strlen(charString));
 
-  NanReturnValue(string);
+  info.GetReturnValue().Set(string);
 }
 

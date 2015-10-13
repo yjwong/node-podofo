@@ -8,7 +8,6 @@
 using v8::Handle;
 using v8::Object;
 using v8::Local;
-using v8::Persistent;
 using v8::FunctionTemplate;
 using v8::Function;
 using v8::String;
@@ -17,123 +16,123 @@ using v8::Boolean;
 using v8::External;
 using v8::Value;
 
-Persistent<FunctionTemplate> PdfMemDocument::constructor_template;
+Nan::Persistent<FunctionTemplate> PdfMemDocument::constructor_template;
 
 PdfMemDocument::PdfMemDocument() {
 	_obj = new PoDoFo::PdfMemDocument();
 }
 
 PdfMemDocument::~PdfMemDocument() {
-	delete _obj;
+  delete _obj;
 }
 
 void PdfMemDocument::Init(Handle<Object> exports) {
-  NanScope();
+  Nan::HandleScope scope;
 
   // Prepare constructor template
-  Local<FunctionTemplate> tpl = NanNew<FunctionTemplate>(New);
-  tpl->SetClassName(NanNew("PdfMemDocument"));
+  Local<FunctionTemplate> tpl = Nan::New<FunctionTemplate>(New);
+  tpl->SetClassName(Nan::New("PdfMemDocument").ToLocalChecked());
   tpl->InstanceTemplate()->SetInternalFieldCount(4);
 
   // Prototype
-  NODE_SET_PROTOTYPE_METHOD(tpl, "Load", Load);
-  NODE_SET_PROTOTYPE_METHOD(tpl, "GetObjects", GetObjects);
-  NODE_SET_PROTOTYPE_METHOD(tpl, "GetInfo", GetInfo);
-  NODE_SET_PROTOTYPE_METHOD(tpl, "GetPageCount", GetPageCount);
-  NODE_SET_PROTOTYPE_METHOD(tpl, "GetPage", GetPage);
- 
-  NanAssignPersistent(constructor_template, tpl);
-  exports->Set(NanNew("PdfMemDocument"), tpl->GetFunction());
+  Nan::SetPrototypeMethod(tpl, "Load", Load);
+  Nan::SetPrototypeMethod(tpl, "GetObjects", GetObjects);
+  Nan::SetPrototypeMethod(tpl, "GetInfo", GetInfo);
+  Nan::SetPrototypeMethod(tpl, "GetPageCount", GetPageCount);
+  Nan::SetPrototypeMethod(tpl, "GetPage", GetPage);
+
+  constructor_template.Reset(tpl); 
+  exports->Set(Nan::New("PdfMemDocument").ToLocalChecked(), tpl->GetFunction());
 }
 
 NAN_METHOD(PdfMemDocument::New) {
-  NanScope();
+  Nan::HandleScope scope;
 
-  if (!args.IsConstructCall()) {
-    return NanThrowTypeError("Use the new operator to create new PdfMemDocument objects");
+  if (!info.IsConstructCall()) {
+    return Nan::ThrowTypeError("Use the new operator to create new PdfMemDocument objects");
   }
 
   PdfMemDocument* objects = new PdfMemDocument();
-  objects->Wrap(args.This());
-  NanReturnValue(args.This());
+  objects->Wrap(info.This());
+  info.GetReturnValue().Set(info.This());
 }
 
 NAN_METHOD(PdfMemDocument::Load) {
-  NanScope();
+  Nan::HandleScope scope;
 
-  if (args.Length() < 1) {
-    return NanThrowTypeError("Load requires at least 1 argument");
+  if (info.Length() < 1) {
+    return Nan::ThrowTypeError("Load requires at least 1 argument");
   }
 
-  PdfMemDocument* obj = ObjectWrap::Unwrap<PdfMemDocument>(args.This());
-  Local<String> filename = args[0]->ToString();
+  PdfMemDocument* obj = ObjectWrap::Unwrap<PdfMemDocument>(info.This());
+  Local<String> filename = info[0]->ToString();
 
   try {
-    NanUtf8String* charFilename = new NanUtf8String(filename);
+    Nan::Utf8String* charFilename = new Nan::Utf8String(filename);
     obj->_obj->Load(charFilename->operator*());
   } catch (PoDoFo::PdfError& e) {
-    Local<FunctionTemplate> errTpl = NanNew(PdfError::constructor_template);
+    Local<FunctionTemplate> errTpl = Nan::New(PdfError::constructor_template);
     Local<Function> errFunc = errTpl->GetFunction();
-    Handle<Value> errFuncArgs[] = { NanNew<External>(&e) };
-    Local<Object> errObj = errFunc->NewInstance(1, errFuncArgs);
-    return NanThrowError(errObj);
+    Handle<Value> errFuncArgs[] = { Nan::New<External>(&e) };
+    Local<Value> errObj = errFunc->NewInstance(1, errFuncArgs);
+    Nan::ThrowError(errObj);
   }
 
-  NanReturnUndefined();
+  info.GetReturnValue().Set(Nan::Undefined());
 }
 
 NAN_METHOD(PdfMemDocument::GetObjects) {
-  NanScope();
+  Nan::HandleScope scope;
 
-  PdfMemDocument* obj = ObjectWrap::Unwrap<PdfMemDocument>(args.This());
-  Local<FunctionTemplate> tpl = NanNew(PdfVecObjects::constructor_template);
+  PdfMemDocument* obj = ObjectWrap::Unwrap<PdfMemDocument>(info.This());
+  Local<FunctionTemplate> tpl = Nan::New(PdfVecObjects::constructor_template);
   Local<Function> func = tpl->GetFunction();
 
-  Handle<Value> newFuncArgs[] = { NanNew<External>(&obj->_obj->GetObjects()) };
+  Handle<Value> newFuncArgs[] = { Nan::New<External>(&obj->_obj->GetObjects()) };
   Local<Object> newObj = func->NewInstance(1, newFuncArgs);
 
-  NanReturnValue(newObj);
+  info.GetReturnValue().Set(newObj);
 }
 
 NAN_METHOD(PdfMemDocument::GetInfo) {
-  NanScope();
+  Nan::HandleScope scope;
 
-  PdfMemDocument* obj = ObjectWrap::Unwrap<PdfMemDocument>(args.This());
-  Local<FunctionTemplate> tpl = NanNew(PdfInfo::constructor_template);
+  PdfMemDocument* obj = ObjectWrap::Unwrap<PdfMemDocument>(info.This());
+  Local<FunctionTemplate> tpl = Nan::New(PdfInfo::constructor_template);
   Local<Function> func = tpl->GetFunction();
 
-  Handle<Value> newFuncArgs[] = { NanNew<External>(obj->_obj->GetInfo()) };
+  Handle<Value> newFuncArgs[] = { Nan::New<External>(obj->_obj->GetInfo()) };
   Local<Object> newObj = func->NewInstance(1, newFuncArgs);
 
-  NanReturnValue(newObj);
+  info.GetReturnValue().Set(newObj);
 }
 
 NAN_METHOD(PdfMemDocument::GetPageCount) {
-  NanScope();
+  Nan::HandleScope scope;
   
-  PdfMemDocument* obj = ObjectWrap::Unwrap<PdfMemDocument>(args.This());
+  PdfMemDocument* obj = ObjectWrap::Unwrap<PdfMemDocument>(info.This());
   int count = obj->_obj->GetPageCount();
 
-  NanReturnValue(NanNew<Number>(count));
+  info.GetReturnValue().Set(Nan::New<Number>(count));
 }
 
 NAN_METHOD(PdfMemDocument::GetPage) {
-  NanScope();
+  Nan::HandleScope scope;
 
-  if (args.Length() < 1) {
-    return NanThrowTypeError("GetPage requires at least 1 argument");
+  if (info.Length() < 1) {
+    return Nan::ThrowTypeError("GetPage requires at least 1 argument");
   }
 
-  PdfMemDocument* obj = ObjectWrap::Unwrap<PdfMemDocument>(args.This());
-  Local<Number> index = args[0]->ToNumber();
+  PdfMemDocument* obj = ObjectWrap::Unwrap<PdfMemDocument>(info.This());
+  Local<Number> index = info[0]->ToNumber();
 
-  Local<FunctionTemplate> tpl = NanNew(PdfPage::constructor_template);
+  Local<FunctionTemplate> tpl = Nan::New(PdfPage::constructor_template);
   Local<Function> func = tpl->GetFunction();
 
   PoDoFo::PdfPage* page = obj->_obj->GetPage(index->Int32Value());
-  Handle<Value> newFuncArgs[] = { NanNew<External>(page) };
+  Handle<Value> newFuncArgs[] = { Nan::New<External>(page) };
   Local<Object> newObj = func->NewInstance(1, newFuncArgs);
   
-  NanReturnValue(newObj);
+  info.GetReturnValue().Set(newObj);
 }
 

@@ -18,13 +18,13 @@ private:
   static NAN_METHOD(QuickEncryptedCheck);
   static NAN_METHOD(GetNumberOfIncrementalUpdates);
   static NAN_METHOD(GetPdfVersionString);
-  static v8::Persistent<v8::FunctionTemplate> constructor_template;
+  static Nan::Persistent<v8::FunctionTemplate> constructor_template;
 
   explicit PdfParser(PdfVecObjects* pVecObjects);
   ~PdfParser();
 
   PoDoFo::PdfParser* _obj;
-  NanUtf8String* _filename;
+  Nan::Utf8String* _filename;
 };
 
 #endif
