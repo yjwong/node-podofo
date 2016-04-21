@@ -18,22 +18,34 @@
         "-fno-exceptions"
       ],
       "conditions": [
-        ['OS=="mac"', {
-         'xcode_settings': {
-           'GCC_ENABLE_CPP_EXCEPTIONS': 'YES'
-         }
+        ["OS=='win'", {
+          "msvs_settings": {
+            "VCCLCompilerTool": {
+              "ExceptionHandling": 1
+            }
+          },
+          "link_settings": {
+            "libraries": ["ws2_32.lib"]
+          },
+          "dependencies": [
+            "deps/podofo.gypi:libpodofo"
+          ]
+        }, {
+          "link_settings": {
+            "libraries": ["-lpodofo"]
+          }
+        }],
+        ["OS=='mac'", {
+          "xcode_settings": {
+           "GCC_ENABLE_CPP_EXCEPTIONS": "YES"
+          }
        }]
       ],
       "include_dirs": [
         "<!(node -e \"require('nan')\")",
         "/usr/include/podofo",
         "/usr/local/include/podofo"
-      ],
-      "link_settings": {
-        "libraries": [
-          "-lpodofo"
-        ]
-      }
+      ]
     },
     {
       "target_name": "action_after_build",
