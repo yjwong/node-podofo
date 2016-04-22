@@ -1,0 +1,39 @@
+version: 0.2.0-{build}
+os: Visual Studio 2015
+environment:
+  matrix:
+    - nodejs_version: 5.10
+      platform: x64
+    - nodejs_version: 5.10
+      platform: x64
+    - nodejs_version: 4.4
+      platform: x86
+    - nodejs_version: 4.4
+      platform: x86
+cache:
+  - '%APPDATA%\npm-cache'
+install:
+  - ps: Install-Product node $env:nodejs_version $env:platform
+  # Download and unpack zlib-1.2.8
+  # Seems like zlib was mistakenly named .tar.gz, when it in fact is a tar archive
+  - ps: Invoke-WebRequest http://zlib.net/zlib-1.2.8.tar.gz -OutFile .\deps\zlib-1.2.8.tar.gz
+  - '"C:\Program Files\7-Zip\7z.exe" x -o.\deps .\deps\zlib-1.2.8.tar.gz'
+  - del .\deps\zlib-1.2.8.tar.gz
+  # Download and unpack freetype-2.6.3
+  - ps: Invoke-WebRequest http://download.savannah.gnu.org/releases/freetype/freetype-2.6.3.tar.gz -OutFile .\deps\freetype-2.6.3.tar.gz
+  - '"C:\Program Files\7-Zip\7z.exe" x -o.\deps .\deps\freetype-2.6.3.tar.gz'
+  - '"C:\Program Files\7-Zip\7z.exe" x -o.\deps .\deps\freetype-2.6.3.tar'
+  - del .\deps\freetype-2.6.3.tar.gz .\deps\freetype-2.6.3.tar
+  # Download and unpack podofo-0.9.3
+  # SourceForge redirects unless we use a well-known User-Agent.
+  - ps: Invoke-WebRequest http://downloads.sourceforge.net/project/podofo/podofo/0.9.3/podofo-0.9.3.tar.gz -OutFile .\deps\podofo-0.9.3.tar.gz -UserAgent [Microsoft.PowerShell.Commands.PSUserAgent]::Chrome
+  - '"C:\Program Files\7-Zip\7z.exe" x -o.\deps .\deps\podofo-0.9.3.tar.gz'
+  - '"C:\Program Files\7-Zip\7z.exe" x -o.\deps .\deps\podofo-0.9.3.tar'
+  - del .\deps\podofo-0.9.3.tar.gz .\deps\podofo-0.9.3.tar
+  # Upgrade npm
+  - npm install -g npm
+build_script:
+  - npm install --build-from-source
+test: off
+artifacts:
+  - path: .\build\stage
