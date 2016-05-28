@@ -25,9 +25,15 @@ for PoDoFo itself. You can download these packages and extract them into `deps/`
 After extraction, the directory tree should look like this:
 
 > - deps/
->   - freetype-2.6.3/
->   - podofo-0.9.3/
->   - zlib-1.2.8/
+>   - freetype/
+>   - podofo/
+>   - zlib/
+
+The following versions have been tested:
+
+- freetype: 2.6.3
+- podofo: 0.9.3
+- zlib: 1.2.8
 
 Then you just need to run `node-pre-gyp configure build` to obtain a binary.
 
