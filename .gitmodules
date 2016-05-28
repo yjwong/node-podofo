@@ -3,7 +3,7 @@
 	url = https://github.com/madler/zlib.git
 [submodule "deps/freetype"]
 	path = deps/freetype
-	url = http://git.sv.nongnu.org/r/freetype/freetype2.git
+	url = http://git.savannah.gnu.org/r/freetype/freetype2.git
 [submodule "deps/podofo"]
 	path = deps/podofo
 	url = https://github.com/yjwong/podofo.git
