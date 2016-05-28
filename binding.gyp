@@ -17,6 +17,9 @@
       "cflags_cc!": [
         "-fno-exceptions"
       ],
+      "dependencies": [
+        "deps/podofo.gypi:libpodofo"
+      ],
       "conditions": [
         ["OS=='win'", {
           "msvs_settings": {
@@ -26,13 +29,6 @@
           },
           "link_settings": {
             "libraries": ["ws2_32.lib"]
-          },
-          "dependencies": [
-            "deps/podofo.gypi:libpodofo"
-          ]
-        }, {
-          "link_settings": {
-            "libraries": ["-lpodofo"]
           }
         }],
         ["OS=='mac'", {
@@ -42,9 +38,7 @@
        }]
       ],
       "include_dirs": [
-        "<!(node -e \"require('nan')\")",
-        "/usr/include/podofo",
-        "/usr/local/include/podofo"
+        "<!(node -e \"require('nan')\")"
       ]
     },
     {

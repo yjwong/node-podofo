@@ -115,7 +115,13 @@
           "cflags": [
             "/EHsc"
           ]
-       }]
+        }],
+        ["OS=='linux'", {
+          "cflags_cc!": [
+            "-fno-exceptions",
+            "-fno-rtti"
+          ]
+        }]
       ],
       "configurations": {
         "Release": {
@@ -135,7 +141,7 @@
         "podofo/podofo/",
         "podofo/src/",
         "podofo/",
-        "./"
+        "overrides/<(OS)/"
       ],
       "dependencies": [
         "zlib.gypi:zlib",
@@ -145,7 +151,7 @@
         "include_dirs": [
           "podofo/src/",
           "podofo/",
-          "./"
+          "overrides/<(OS)/"
         ]
       }
     }
