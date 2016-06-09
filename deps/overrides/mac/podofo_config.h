@@ -44,7 +44,7 @@
 /* #undef TEST_BIG */
 
 /* Features */
-/* #undef PODOFO_NO_FONTMANAGER */
+#define PODOFO_NO_FONTMANAGER 1
 
 /* Libraries */
 /* #undef PODOFO_HAVE_JPEG_LIB */
