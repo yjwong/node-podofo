@@ -147,7 +147,7 @@
         "podofo/podofo/",
         "podofo/src/",
         "podofo/",
-        "overrides/<(OS)/"
+        "overrides/<(OS)/<(target_arch)/"
       ],
       "dependencies": [
         "zlib.gypi:zlib",
@@ -157,7 +157,7 @@
         "include_dirs": [
           "podofo/src/",
           "podofo/",
-          "overrides/<(OS)/"
+          "overrides/<(OS)/<(target_arch)/"
         ]
       }
     }
