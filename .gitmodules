@@ -6,4 +6,4 @@
 	url = http://git.savannah.gnu.org/r/freetype/freetype2.git
 [submodule "deps/podofo"]
 	path = deps/podofo
-	url = https://github.com/yjwong/podofo.git
+	url = https://github.com/MatthD/podofo
