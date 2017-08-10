@@ -17,6 +17,20 @@ Then, installing this library is as simple as:
 
     npm install podofo
 
+# Using with node 
+
+
+```javascript
+const podofo = require('podofo');
+
+let pdf = new podofo.PdfMemDocument(false);
+pdf.Load('/path/to/a/file.pdf');
+
+console.log(pdf.GetInfo().GetAuthor());
+// Will return software author
+```
+
+
 # Building on Windows
 
 PoDoFo (minimally) depends on zlib and freetype. You will also need the source
