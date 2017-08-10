@@ -45,9 +45,9 @@ After extraction, the directory tree should look like this:
 
 The following versions have been tested:
 
-- freetype: 2.6.3
-- podofo: 0.9.3
-- zlib: 1.2.8
+- freetype: 2.8
+- podofo: 0.9.5
+- zlib: 1.2.11
 
 Then you just need to run `node-pre-gyp configure build` to obtain a binary.
 
@@ -61,5 +61,9 @@ free.
 By default log & debug are disable, to enable them when you can just pass `true` option to PdfMemDocument as:
 
 `var pdf = new podofo.PdfMemDocument(true);`
+
+# Notice
+
+All Podofo Classes cannot be used directly, for example, PdfError could be called only via c++, not javascript binding.
 
 
