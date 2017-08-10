@@ -40,3 +40,12 @@ Then you just need to run `node-pre-gyp configure build` to obtain a binary.
 Of course, you will also need to have a toolchain installed. This has been tested
 with Visual Studio 2015. The Community edition is available from Microsoft for
 free.
+
+
+# Debug & Logs
+
+By default log & debug are disable, to enable them when you can just pass `true` option to PdfMemDocument as:
+
+`var pdf = new podofo.PdfMemDocument(true);`
+
+
