@@ -52,6 +52,12 @@ NAN_METHOD(PdfMemDocument::New) {
     return Nan::ThrowTypeError("Use the new operator to create new PdfMemDocument objects");
   }
 
+  if(info.Length() && info[0]->IsBoolean() && info[0]->IsTrue() ){
+    PoDoFo::PdfError::EnableDebug(true);
+  }else{
+    PoDoFo::PdfError::EnableDebug(false);
+  }
+
   PdfMemDocument* objects = new PdfMemDocument();
   objects->Wrap(info.This());
   info.GetReturnValue().Set(info.This());

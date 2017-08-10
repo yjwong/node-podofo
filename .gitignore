@@ -40,3 +40,5 @@ lib/binding/
 
 # NPM
 node_modules/
+
+.DS_Store

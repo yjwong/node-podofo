@@ -17,6 +17,7 @@ void DefineConstant(Handle<Object> exports, const char* name, int value) {
 }
 
 void InitAll(Handle<Object> exports) {
+
   PdfContentsTokenizer::Init(exports);
   PdfError::Init(exports);
   PdfInfo::Init(exports);
@@ -26,6 +27,8 @@ void InitAll(Handle<Object> exports) {
   PdfVariant::Init(exports);
   PdfObject::Init(exports);
   PdfVecObjects::Init(exports);
+
+  DefineConstant(exports, "eLogSeverity_None ", PoDoFo::eLogSeverity_None);
 
   DefineConstant(exports, "ePdfContentsType_Keyword", PoDoFo::ePdfContentsType_Keyword);
   DefineConstant(exports, "ePdfContentsType_Variant", PoDoFo::ePdfContentsType_Variant);
