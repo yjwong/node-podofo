@@ -40,6 +40,8 @@ install:
   - del .\deps\podofo-0.9.5.tar.gz .\deps\podofo-0.9.5.tar
   # Upgrade npm
   # - npm install -g npm
+  - npm install -g npm
+  - set PATH=%APPDATA%\npm;%PATH%
   - npm install -g node-pre-gyp 
   - npm install -g node-pre-gyp-github
 
