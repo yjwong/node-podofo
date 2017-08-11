@@ -22,22 +22,8 @@ cache:
   - '%APPDATA%\npm-cache'
 install:
   - ps: Install-Product node $env:nodejs_version $env:platform
-  # Download and unpack zlib-1.2.11
-  # Seems like zlib was mistakenly named .tar.gz, when it in fact is a tar archive
-  - ps: Invoke-WebRequest http://zlib.net/zlib-1.2.11.tar.gz -OutFile .\deps\zlib-1.2.11.tar.gz
-  - '"C:\Program Files\7-Zip\7z.exe" x -o.\deps .\deps\zlib-1.2.11.tar.gz'
-  - del .\deps\zlib-1.2.11.tar.gz
-  # Download and unpack freetype-2.8
-  - ps: Invoke-WebRequest http://download.savannah.gnu.org/releases/freetype/freetype-2.8.tar.gz -OutFile .\deps\freetype-2.8.tar.gz
-  - '"C:\Program Files\7-Zip\7z.exe" x -o.\deps .\deps\freetype-2.8.tar.gz'
-  - '"C:\Program Files\7-Zip\7z.exe" x -o.\deps .\deps\freetype-2.8.tar'
-  - del .\deps\freetype-2.8.tar.gz .\deps\freetype-2.8.tar
-  # Download and unpack podofo-0.9.3
-  # SourceForge redirects unless we use a well-known User-Agent.
-  - ps: Invoke-WebRequest http://downloads.sourceforge.net/project/podofo/podofo/0.9.5/podofo-0.9.5.tar.gz -OutFile .\deps\podofo-0.9.5.tar.gz -UserAgent [Microsoft.PowerShell.Commands.PSUserAgent]::Chrome
-  - '"C:\Program Files\7-Zip\7z.exe" x -o.\deps .\deps\podofo-0.9.5.tar.gz'
-  - '"C:\Program Files\7-Zip\7z.exe" x -o.\deps .\deps\podofo-0.9.5.tar'
-  - del .\deps\podofo-0.9.5.tar.gz .\deps\podofo-0.9.5.tar
+  - git submodule init
+  - git submodule update
   # Upgrade npm
   # - npm install -g npm
   - npm install -g npm
