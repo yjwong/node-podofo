@@ -27,8 +27,8 @@
   ],
   "binary": {
     "module_name": "podofo",
-    "module_path": "./lib/binding/",
-    "host": "https://node-podofo.s3-ap-southeast-1.amazonaws.com"
+    "remote_path": "{version}",
+    "host": "https://github.com/MatthD/node-podofo-releases/releases/download/"
   },
   "devDependencies": {
     "aws-sdk": "^2.1.36"
