@@ -39,8 +39,8 @@ install:
   - '"C:\Program Files\7-Zip\7z.exe" x -o.\deps .\deps\podofo-0.9.5.tar'
   - del .\deps\podofo-0.9.5.tar.gz .\deps\podofo-0.9.5.tar
   # Upgrade npm
-  - npm install -g npm
-  - npm install -g node-pre-gyp 
+  # - npm install -g npm
+  - npm install -g node-pre-gyp 
   - npm install -g node-pre-gyp-github
 
 build_script:
