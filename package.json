@@ -27,6 +27,7 @@
   ],
   "binary": {
     "module_name": "podofo",
+    "module_path": "./lib/binding/",
     "remote_path": "{version}",
     "host": "https://github.com/MatthD/node-podofo-releases/releases/download/"
   },
