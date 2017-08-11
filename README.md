@@ -1,6 +1,6 @@
 # Node-Podofo
 
-[![Build Status](https://travis-ci.org/MatthD/node-podofo.svg?branch=0.9.5)](https://travis-ci.org/MatthD/node-podofo)
+[![Build Status](https://api.travis-ci.org/MatthD/node-podofo.svg?branch=master)](https://travis-ci.org/MatthD/node-podofo)
 [![Build Status](https://ci.appveyor.com/api/projects/status/github/matthd/node-podofo?svg=true)](https://ci.appveyor.com/project/MatthD/node-podofo)
 
 Node-podofo in a Node addons written in C++ to manipulate & read PDF files (create pdf, get metadata, information, author, get text from pdf ...).
@@ -79,6 +79,14 @@ Then you just need to run `node-pre-gyp configure build` to obtain a binary.
 Of course, you will also need to have a toolchain installed. This has been tested
 with Visual Studio 2015. The Community edition is available from Microsoft for
 free.
+
+# Examples
+
+You can exec a simple GetAuthor() & text-extractor:
+
+From your main module(main-module/node_modules/node-podofo) just launch:
+
+    node node_modules/node-podofo/index.js
 
 # Dev
 
