@@ -28,7 +28,9 @@ before_install:
 
 install:
 - npm install --build-from-source
+- node-pre-gyp configure
+- node-pre-gyp build
+- node-pre-gyp package
 
 script:
 - node-pre-gyp-github publish --release
-  
