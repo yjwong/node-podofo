@@ -44,6 +44,7 @@ install:
   - set PATH=%APPDATA%\npm;%PATH%
   - npm install -g node-pre-gyp 
   - npm install -g node-pre-gyp-github
+  - npm install --build-from-source
 
 build_script:
   - node-pre-gyp configure
