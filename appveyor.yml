@@ -44,6 +44,7 @@ install:
   - npm install -g node-pre-gyp-github
 
 build_script:
+  - node-pre-gyp configure
   - node-pre-gyp build
   - node-pre-gyp package
 test: off
