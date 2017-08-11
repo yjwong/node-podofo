@@ -1,6 +1,6 @@
 {
-  "name": "podofo",
-  "version": "0.3.1",
+  "name": "node-podofo",
+  "version": "0.9.5",
   "description": "Node.js bindings for the PoDoFo PDF library.",
   "main": "index.js",
   "scripts": {

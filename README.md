@@ -1,3 +1,10 @@
+This is an updated fork of [podofo]()
+
+# Why this fork ?
+
+This fork compile 3 years of podofo dev (from 0.9.3 to 0.9.5)
+And it add the possibility to DISABLE DEBUG & LOG by default which was really terrible when using with Node.js
+
 # Bindings for the PoDoFo PDF Library
 
 This project provides Node.js bindings for the [PoDoFo](http://podofo.sourceforge.net/)
@@ -65,5 +72,5 @@ By default log & debug are disable, to enable them when you can just pass `true`
 # Notice
 
 All Podofo Classes cannot be used directly, for example, PdfError could be called only via c++, not javascript binding.
-
+If you want to update this fork, you must know about c++/Node.js, podofo, node-addons, Nan V8, node-pre-gyp, node-pre-gyp-github & use travis for build for OSX+Linux and Appveyor to build for Windows.
 
