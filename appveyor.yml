@@ -16,7 +16,7 @@ environment:
       platform: x86
   access_token:
     secure: dEViCwlC9QsVdmBzdbybivULfYql2xhNYGD5/qhN3pM1OhCjvmZx1xGLGNg5paSW
-  NODE_PRE_GYP_GITHUB_TOKEN: dEViCwlC9QsVdmBzdbybivULfYql2xhNYGD5/qhN3pM1OhCjvmZx1xGLGNg5paSW
+  : dEViCwlC9QsVdmBzdbybivULfYql2xhNYGD5/qhN3pM1OhCjvmZx1xGLGNg5paSW
 
 cache:
   - '%APPDATA%\npm-cache'
@@ -41,7 +41,7 @@ artifacts:
   - path: .\build\stage
 on_success:
   - git config --global credential.helper store
-  - ps: Add-Content "$env:USERPROFILE\.git-credentials" "https://$($env:access_token):x-oauth-basic@github.com`n"
+  - ps: Add-Content "$env:USERPROFILE\.git-credentials" "https://$($env:NODE_PRE_GYP_GITHUB_TOKEN):x-oauth-basic@github.com`n"
   - git config --global user.email "matthias.dieudonne@gmail.com"
   - git config --global user.name "MatthD"
   - node-pre-gyp-github publish --release
