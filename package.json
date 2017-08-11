@@ -9,15 +9,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/yjwong/node-podofo.git"
+    "url": "git+https://github.com/MatthD/node-podofo"
   },
   "author": "Wong Yong Jie <yjwong92@gmail.com>",
   "license": "MIT",
   "gypfile": true,
   "bugs": {
-    "url": "https://github.com/yjwong/node-podofo/issues"
+    "url": "https://github.com/MatthD/node-podofoissues"
   },
-  "homepage": "https://github.com/yjwong/node-podofo#readme",
+  "homepage": "https://github.com/MatthD/node-podofo#readme",
   "dependencies": {
     "nan": "^2.1.0",
     "node-pre-gyp": "^0.6.7"
@@ -29,7 +29,7 @@
     "module_name": "podofo",
     "module_path": "./lib/binding/",
     "remote_path": "{version}",
-    "host": "https://github.com/MatthD/node-podofo-releases/releases/download/"
+    "host": "https://github.com/MatthD/node-podofo/releases/download/"
   },
   "devDependencies": {
     "aws-sdk": "^2.1.36"
