@@ -22,7 +22,7 @@ before_install:
 - npm install -g node-pre-gyp 
 - npm install -g node-pre-gyp-github
 - git config --global credential.helper store
-- ps: Add-Content "$env:USERPROFILE\.git-credentials" "https://$($env:NODE_PRE_GYP_GITHUB_TOKEN):x-oauth-basic@github.com`n"
+- git config --global gtihub.token $NODE_PRE_GYP_GITHUB_TOKEN
 - git config --global user.email "matthias.dieudonne@gmail.com"
 - git config --global user.name "MatthD"
 
@@ -30,4 +30,5 @@ install:
 - npm install --build-from-source
 
 script:
+- node-pre-gyp-github publish --release
   
