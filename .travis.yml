@@ -34,3 +34,6 @@ install:
 
 script:
 - node-pre-gyp-github publish --release
+
+notifications:
+  email: false

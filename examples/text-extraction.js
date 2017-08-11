@@ -1,7 +1,8 @@
-var podofo = require('../index');
+var podofo = require('../index'),
+  path = require('path');
 
 var pdf = new podofo.PdfMemDocument();
-pdf.Load('/tmp/business-resume.pdf');
+pdf.Load(path.resolve(__dirname , 'valid.pdf'));
 
 /**
  * Returns the extracted text for a page.
