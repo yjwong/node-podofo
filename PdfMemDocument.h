@@ -21,6 +21,7 @@ private:
   static NAN_METHOD(GetInfo);
   static NAN_METHOD(GetPageCount);
   static NAN_METHOD(GetPage);
+  static NAN_METHOD(GetPdfVersion);
 
   explicit PdfMemDocument();
   ~PdfMemDocument();

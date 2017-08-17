@@ -1,0 +1,39 @@
+language: cpp
+ 
+os:
+- linux
+- osx
+ 
+env:
+  matrix:
+    - NODE_VERSION="8.3"
+    - NODE_VERSION="6.11"
+    - NODE_VERSION="4.4"
+ 
+before_install:
+- rm -rf ~/.nvm/ && git clone --depth 1 https://github.com/creationix/nvm.git ~/.nvm
+- source ~/.nvm/nvm.sh
+- nvm install $NODE_VERSION
+- nvm use $NODE_VERSION
+- git submodule init
+- git submodule update
+# Upgrade npm
+# - npm install -g npm
+- npm install -g node-pre-gyp 
+- npm install -g node-pre-gyp-github
+- git config --global credential.helper store
+- git config --global gtihub.token $NODE_PRE_GYP_GITHUB_TOKEN
+- git config --global user.email "matthias.dieudonne@gmail.com"
+- git config --global user.name "MatthD"
+
+install:
+- npm install --build-from-source
+- node-pre-gyp configure
+- node-pre-gyp build
+- node-pre-gyp package
+
+script:
+- node-pre-gyp-github publish --release
+
+notifications:
+  email: false

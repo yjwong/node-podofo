@@ -1,9 +1,12 @@
 [submodule "deps/zlib"]
 	path = deps/zlib
 	url = https://github.com/madler/zlib.git
+  branch = v1.2.11
 [submodule "deps/freetype"]
 	path = deps/freetype
 	url = http://git.savannah.gnu.org/r/freetype/freetype2.git
+  branch = VER-2-8
 [submodule "deps/podofo"]
 	path = deps/podofo
-	url = https://github.com/yjwong/podofo.git
+	url = https://github.com/MatthD/podofo
+  branch = RELEASE_0_9_5

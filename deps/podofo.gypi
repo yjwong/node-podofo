@@ -46,7 +46,6 @@
         "podofo/src/base/PdfRefCountedBuffer.cpp",
         "podofo/src/base/PdfRefCountedInputDevice.cpp",
         "podofo/src/base/PdfReference.cpp",
-        "podofo/src/base/PdfSigIncWriter.cpp",
         "podofo/src/base/PdfStream.cpp",
         "podofo/src/base/PdfString.cpp",
         "podofo/src/base/PdfTokenizer.cpp",
@@ -57,7 +56,7 @@
         "podofo/src/base/PdfXRefStream.cpp",
         "podofo/src/base/PdfXRefStreamParserObject.cpp",
 
-        # From PODOFO_DOC_SOURCES
+        # From PODOFO_DOC_SOURCES,
         "podofo/src/doc/PdfAcroForm.cpp",
         "podofo/src/doc/PdfAction.cpp",
         "podofo/src/doc/PdfAnnotation.cpp",
@@ -84,8 +83,8 @@
         "podofo/src/doc/PdfFontTTFSubset.cpp",
         "podofo/src/doc/PdfFontTrueType.cpp",
         "podofo/src/doc/PdfFontType1.cpp",
-        "podofo/src/doc/PdfFontType3.cpp",
         "podofo/src/doc/PdfFontType1Base14.cpp",
+        "podofo/src/doc/PdfFontType3.cpp",
         "podofo/src/doc/PdfFunction.cpp",
         "podofo/src/doc/PdfHintStream.cpp",
         "podofo/src/doc/PdfIdentityEncoding.cpp",
@@ -100,15 +99,12 @@
         "podofo/src/doc/PdfPainter.cpp",
         "podofo/src/doc/PdfPainterMM.cpp",
         "podofo/src/doc/PdfShadingPattern.cpp",
-        "podofo/src/doc/PdfSigIncMemDocument.cpp",
-        "podofo/src/doc/PdfSigIncPainter.cpp",
-        "podofo/src/doc/PdfSigIncSignatureField.cpp",
         "podofo/src/doc/PdfSignOutputDevice.cpp",
         "podofo/src/doc/PdfSignatureField.cpp",
         "podofo/src/doc/PdfStreamedDocument.cpp",
         "podofo/src/doc/PdfTable.cpp",
         "podofo/src/doc/PdfTilingPattern.cpp",
-        "podofo/src/doc/PdfXObject.cpp"
+        "podofo/src/doc/PdfXObject.cpp",
       ],
       "conditions": [
         ["OS=='win'", {

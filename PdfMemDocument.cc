@@ -40,8 +40,9 @@ void PdfMemDocument::Init(Handle<Object> exports) {
   Nan::SetPrototypeMethod(tpl, "GetInfo", GetInfo);
   Nan::SetPrototypeMethod(tpl, "GetPageCount", GetPageCount);
   Nan::SetPrototypeMethod(tpl, "GetPage", GetPage);
+  Nan::SetPrototypeMethod(tpl, "GetPdfVersion", GetPdfVersion);
 
-  constructor_template.Reset(tpl); 
+  constructor_template.Reset(tpl);
   exports->Set(Nan::New("PdfMemDocument").ToLocalChecked(), tpl->GetFunction());
 }
 
@@ -50,6 +51,14 @@ NAN_METHOD(PdfMemDocument::New) {
 
   if (!info.IsConstructCall()) {
     return Nan::ThrowTypeError("Use the new operator to create new PdfMemDocument objects");
+  }
+
+  if(info.Length() && info[0]->IsBoolean() && info[0]->IsTrue() ){
+    PoDoFo::PdfError::EnableDebug(true);
+	  PoDoFo::PdfError::EnableLogging(true);
+  }else{
+    PoDoFo::PdfError::EnableDebug(false);
+	  PoDoFo::PdfError::EnableLogging(false);
   }
 
   PdfMemDocument* objects = new PdfMemDocument();
@@ -109,11 +118,20 @@ NAN_METHOD(PdfMemDocument::GetInfo) {
 
 NAN_METHOD(PdfMemDocument::GetPageCount) {
   Nan::HandleScope scope;
-  
+
   PdfMemDocument* obj = ObjectWrap::Unwrap<PdfMemDocument>(info.This());
   int count = obj->_obj->GetPageCount();
 
   info.GetReturnValue().Set(Nan::New<Number>(count));
+}
+
+NAN_METHOD(PdfMemDocument::GetPdfVersion) {
+  Nan::HandleScope scope;
+
+  PdfMemDocument* obj = ObjectWrap::Unwrap<PdfMemDocument>(info.This());
+  int pdfVersion = obj->_obj->GetPdfVersion();
+
+  info.GetReturnValue().Set(Nan::New<Number>(pdfVersion));
 }
 
 NAN_METHOD(PdfMemDocument::GetPage) {
@@ -132,7 +150,6 @@ NAN_METHOD(PdfMemDocument::GetPage) {
   PoDoFo::PdfPage* page = obj->_obj->GetPage(index->Int32Value());
   Handle<Value> newFuncArgs[] = { Nan::New<External>(page) };
   Local<Object> newObj = func->NewInstance(1, newFuncArgs);
-  
+
   info.GetReturnValue().Set(newObj);
 }
-
